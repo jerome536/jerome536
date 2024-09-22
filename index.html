@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur d'emprunt bancaire (XPF)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3fe;
+            border: 1px solid #b6d4fe;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur d'emprunt bancaire (XPF)</h1>
+        <form id="loanForm">
+            <label for="amount">Montant de l'emprunt (XPF):</label>
+            <input type="number" id="amount" required min="1">
+
+            <label for="rate">Taux d'intérêt annuel (%):</label>
+            <input type="number" id="rate" required min="0" step="0.01">
+
+            <label for="term">Durée du prêt (années):</label>
+            <input type="number" id="term" required min="1">
+
+            <button type="submit">Calculer</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function formatNumber(num) {
+            return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+
+        document.getElementById('loanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('amount').value);
+            const rate = parseFloat(document.getElementById('rate').value) / 100 / 12;
+            const term = parseInt(document.getElementById('term').value) * 12;
+
+            const monthlyPayment = (amount * rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+            const totalPayment = monthlyPayment * term;
+            const totalInterest = totalPayment - amount;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>Résultats :</h3>
+                <p>Mensualité : ${formatNumber(monthlyPayment)} XPF</p>
+                <p>Montant total payé : ${formatNumber(totalPayment)} XPF</p>
+                <p>Total des intérêts : ${formatNumber(totalInterest)} XPF</p>
+            `;
+        });
+    </script>
+</body>
+</html>
+add loan calculator HTML
